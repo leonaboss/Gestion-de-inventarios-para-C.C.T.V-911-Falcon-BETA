@@ -1,0 +1,15 @@
+asgiref==3.11.0
+cffi==2.0.0
+cryptography==46.0.3
+Django==5.2.9
+django-stubs==5.2.8
+django-stubs-ext==5.2.8
+mysqlclient==2.2.7
+openpyxl==3.1.2
+pycparser==2.23
+python-decouple==3.8
+sqlparse==0.5.4
+stubs==1.0.0
+types-PyYAML==6.0.12.20250915
+typing_extensions==4.15.0
+tzdata==2025.2

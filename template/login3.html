@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Crear Cuenta</title>
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/login.css' %}" rel="stylesheet" />
+    <link rel="icon" type="image/jpeg" href="{% static 'assets/img/LOGO.jpg' %}">
+</head>
+<body class="bg-primary page-login">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="card shadow-lg border-0 rounded-lg">
+                    <div class="card-header">
+                        <h3 class="text-center my-3">👤 Crear Nueva Cuenta</h3>
+                    </div>
+                    <div class="card-body">
+                        {% if form.errors %}
+                            <div class="alert alert-danger" role="alert">
+                                <strong>Error:</strong> Por favor, corrige los errores a continuación.
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="id_username" name="username" type="text" placeholder="Usuario" required />
+                                <label for="id_username">Usuario</label>
+                                {{ form.username.errors }}
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input class="form-control" id="id_first_name" name="first_name" type="text" placeholder="Nombre" required />
+                                        <label for="id_first_name">Nombre</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input class="form-control" id="id_last_name" name="last_name" type="text" placeholder="Apellido" required />
+                                        <label for="id_last_name">Apellido</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="id_frase_seguridad" name="frase_seguridad" type="text" placeholder="Frase de Seguridad" required />
+                                <label for="id_frase_seguridad">Frase de Seguridad (para recuperar cuenta)</label>
+                                {{ form.frase_seguridad.errors }}
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="id_password" name="password" type="password" placeholder="Contraseña" required />
+                                <label for="id_password">Contraseña</label>
+                                {{ form.password.errors }}
+                            </div>
+                            <button class="btn btn-primary w-100" type="submit">Crear Cuenta</button>
+                        </form>
+                    </div>
+                    <div class="card-footer text-center py-3">
+                        <div class="small"><a href="{% url 'login' %}">¿Ya tienes una cuenta? Inicia sesión</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,201 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Crear / Editar Usuario</title>
+    <link rel="icon" type="image/jpeg" href="{% static 'assets/img/LOGO.jpg' %}">
+    <!-- Local Bootstrap renamed + estilos del proyecto -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/index.css' %}" rel="stylesheet" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <style>
+            /* Ajuste para que los checkboxes se vean mejor alineados */
+            .form-check-input { margin-top: 0.3em; }
+            .password-container {
+                position: relative;
+            }
+            .toggle-password {
+                position: absolute;
+                top: 50%;
+                right: 10px;
+                transform: translateY(-50%);
+                cursor: pointer;
+                color: #6c757d;
+            }
+        </style>
+    </head>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark fixed-top-only">
+            <a class="navbar-brand ps-3" href="{% url 'inventario' %}">Gestión de Bienes</a>
+        </nav>
+    
+        <div class="container mt-5 pt-4">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card shadow-lg border-0 rounded-lg">
+                        <div class="card-header">
+                            <h3 class="text-center my-3">👥 Gestión de Usuario</h3>
+                        </div>
+                        <div class="card-body">
+                            {% if form.non_field_errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ form.non_field_errors }}
+                                </div>
+                            {% endif %}
+                            <form method="post" novalidate>
+                                {% csrf_token %}
+                                
+                                <!-- Username -->
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold" for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+                                    <input type="text" name="{{ form.username.name }}" id="{{ form.username.id_for_label }}" class="form-control" maxlength="20" value="{{ form.username.value|default_if_none:'' }}" required autocomplete="username" {% if usuario %}readonly{% endif %}>
+                                    <div class="form-text text-muted small">Requerido. 20 carácteres como máximo. Únicamente letras, dígitos y @/./+/-/_</div>
+                                    {% for error in form.username.errors %}
+                                        <div class="text-danger small mt-1">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+    
+                                <!-- First Name & Last Name -->
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold" for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
+                                        {{ form.first_name }}
+                                        {% for error in form.first_name.errors %}
+                                            <div class="text-danger small mt-1">{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold" for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
+                                        {{ form.last_name }}
+                                        {% for error in form.last_name.errors %}
+                                            <div class="text-danger small mt-1">{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+    
+                                <!-- Email -->
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold" for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                                    {{ form.email }}
+                                    {% for error in form.email.errors %}
+                                        <div class="text-danger small mt-1">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+    
+                                <!-- Frase de Seguridad -->
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold" for="{{ form.frase_seguridad.id_for_label }}">Frase de seguridad</label>
+                                    <input type="text" name="{{ form.frase_seguridad.name }}" id="{{ form.frase_seguridad.id_for_label }}" class="form-control" value="{{ form.frase_seguridad.value|default_if_none:'' }}">
+                                    {% if form.frase_seguridad.help_text %}
+                                        <div class="form-text text-muted small">{{ form.frase_seguridad.help_text }}</div>
+                                    {% endif %}
+                                    {% for error in form.frase_seguridad.errors %}
+                                        <div class="text-danger small mt-1">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+    
+                                <!-- Password -->
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold" for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+                                    <div class="password-container">
+                                        <input type="password" name="{{ form.password.name }}" id="{{ form.password.id_for_label }}" class="form-control" autocomplete="new-password">
+                                        <i class="fas fa-eye toggle-password"></i>
+                                    </div>
+                                    {% if form.password.help_text %}
+                                        <div class="form-text text-muted small">{{ form.password.help_text }}</div>
+                                    {% endif %}
+                                    {% for error in form.password.errors %}
+                                        <div class="text-danger small mt-1">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+    
+                                <!-- Permisos -->
+                                <div class="row mb-3">
+                                    <h6 class="fw-bold">Permisos de Administrador</h6>
+                                    <div class="col-md-4">
+                                        <div class="form-check">
+                                            {{ form.is_active }}
+                                            <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
+                                                {{ form.is_active.label }}
+                                            </label>
+                                            {% if form.is_active.help_text %}<div class="form-text text-muted small">{{ form.is_active.help_text }}</div>{% endif %}
+                                            {% for error in form.is_active.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-check">
+                                            {{ form.is_staff }}
+                                            <label class="form-check-label" for="{{ form.is_staff.id_for_label }}">
+                                                {{ form.is_staff.label }}
+                                            </label>
+                                            {% if form.is_staff.help_text %}<div class="form-text text-muted small">{{ form.is_staff.help_text }}</div>{% endif %}
+                                            {% for error in form.is_staff.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-check">
+                                            {{ form.is_superuser }}
+                                            <label class="form-check-label" for="{{ form.is_superuser.id_for_label }}">
+                                                {{ form.is_superuser.label }}
+                                            </label>
+                                            {% if form.is_superuser.help_text %}<div class="form-text text-muted small">{{ form.is_superuser.help_text }}</div>{% endif %}
+                                            {% for error in form.is_superuser.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+    
+                                <div class="d-flex justify-content-between mt-4">
+                                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                    <a href="{% url 'admin_panel' %}" class="btn btn-outline-secondary">Cancelar</a>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-footer text-center py-3">
+                            <div class="small text-muted">Gestión reservada para administradores.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <script src="{% static 'js/scripts.js' %}"></script>
+        <script src="{% static 'js/indexjs.js' %}"></script>
+        <script src="{% static 'js/inactivity-timer.js' %}"></script>
+        <script>
+            // Script para aplicar automáticamente estilos Bootstrap a los campos de Django
+            document.addEventListener("DOMContentLoaded", function() {
+                var inputs = document.querySelectorAll('input, select, textarea');
+                inputs.forEach(function(input) {
+                    if (input.type === 'checkbox') {
+                        input.classList.add('form-check-input');
+                        input.classList.add('ms-2'); // Margen para separar del label si es necesario
+                    } else {
+                        input.classList.add('form-control');
+                    }
+                });
+    
+                // Lógica para ver/ocultar contraseña
+                const togglePassword = document.querySelector('.toggle-password');
+                if (togglePassword) {
+                    togglePassword.addEventListener('click', function () {
+                        const passwordInput = document.getElementById('{{ form.password.id_for_label }}');
+                        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                        passwordInput.setAttribute('type', type);
+                        
+                        const icon = this;
+                        if (type === 'password') {
+                            icon.classList.remove('fa-eye-slash');
+                            icon.classList.add('fa-eye');
+                        } else {
+                            icon.classList.remove('fa-eye');
+                            icon.classList.add('fa-eye-slash');
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+    </html>

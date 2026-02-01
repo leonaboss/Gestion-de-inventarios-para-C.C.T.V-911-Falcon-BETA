@@ -1,0 +1,20 @@
+/*
+ * Estilos para el panel de administración.
+ * Hereda la mayoría de los estilos de styles.css e index.css.
+ * Se enfoca en los componentes específicos del panel como las pestañas.
+ */
+
+body {
+    background-color: #f4f7f9; /* Mismo fondo que el resto de la app */
+}
+
+/* Estilo para las pestañas (nav-tabs) */
+.nav-tabs .nav-link {
+    color: var(--custom-secondary); /* Gris pizarra */
+    font-weight: 500;
+}
+
+.nav-tabs .nav-link.active {
+    color: var(--custom-primary); /* Azul pizarra oscuro */
+    border-color: #dee2e6 #dee2e6 #fff;
+}

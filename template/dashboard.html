@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% block title %}Inventario - Menú{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4">
+    {% if user.is_authenticated %}
+        <div class="alert alert-success mt-3" role="alert">
+            Bienvenido, <strong>{{ user.username }}</strong>
+        </div>
+    {% else %}
+        <div class="alert alert-info mt-3" role="alert">
+            Bienvenido, invitado. Por favor <a href="{% url 'login' %}">inicie sesión</a>.
+        </div>
+    {% endif %}
+
+    {% if error_message %}
+        <div class="alert alert-warning mt-3" role="alert">
+            ⚠️ {{ error_message }}
+        </div>
+    {% endif %}
+
+    <!-- Resumen General -->
+    <h2 class="mt-4">Resumen General</h2>
+    <div class="row">
+        <!-- Tarjeta Bienes Activos -->
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Bienes Activos</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_bienes_activos }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarjeta Bienes Inactivos -->
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card border-left-secondary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">Bienes Inactivos</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_bienes_inactivos }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarjeta Total de Movimientos -->
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total de Movimientos</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_movimientos }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta Valor Total del Inventario -->
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Valor Total del Inventario</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">${{ valor_total_inventario|floatformat:2 }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarjeta Usuarios -->
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Usuarios Registrados</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_usuarios }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarjeta Movimientos Recientes -->
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card border-left-dark shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">Movimientos (Últimos 7 días)</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ movimientos_recientes }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Inventario - Movimientos{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4">
+    <div id="mainContent" class="mt-4">
+        <!-- Historial de Movimientos -->
+        <div class="mt-5">
+            <h2 class="mb-3">📜 Historial de Movimientos</h2>
+            <div class="d-flex justify-content-end mb-3">
+                <form method="get" class="d-flex me-3" style="max-width: 400px;">
+                    <input class="form-control me-2" type="search" name="q" placeholder="Buscar usuario, bien..." value="{{ current_query|default:'' }}">
+                    <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+                </form>
+                <form method="post" action="{% url 'limpiar_historial_movimientos' %}" onsubmit="return confirm('¿Estás seguro de que deseas limpiar todo el historial de movimientos? Esta acción no se puede deshacer.');">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i> Limpiar Historial
+                    </button>
+                </form>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover rounded shadow-sm">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Bienes</th>
+                            <th>Tipo</th>
+                            <th>Cantidad</th>
+                            <th>Usuario</th>
+                            <th>Observación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for mov in movimientos %}
+                        <tr>
+                            <td>{{ mov.fecha|date:"d/m/Y H:i" }}</td>
+                            <td>
+                                {% if mov.producto %}
+                                    {{ mov.producto.descripcion|default:"(Sin descripción)" }}
+                                {% else %}
+                                    (Sin producto asociado)
+                                {% endif %}
+                            </td>
+                            <td>{{ mov.tipo_movimiento.get_tipo_display }}</td>
+                            <td>{{ mov.cantidad }}</td>
+                            <td>{{ mov.usuario.username }}</td>
+                            <td>{{ mov.observacion }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="6">No hay movimientos registrados.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

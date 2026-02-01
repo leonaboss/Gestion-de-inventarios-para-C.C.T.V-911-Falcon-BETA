@@ -1,0 +1,33 @@
+<nav class="sb-sidenav accordion sb-sidenav-dark">
+    <div class="sb-sidenav-menu">
+        <div class="nav">
+            <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">
+                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                Menú
+            </a>
+    
+            <a class="nav-link {% if request.resolver_match.url_name == 'inventario' %}active{% endif %}" href="{% url 'inventario' %}">
+                Bienes
+            </a>
+            <a class="nav-link {% if request.resolver_match.url_name == 'bienes_inactivos' %}active{% endif %}" href="{% url 'bienes_inactivos' %}">
+                Bienes Inactivos
+            </a>
+            <a class="nav-link {% if request.resolver_match.url_name == 'historial' %}active{% endif %}" href="{% url 'historial' %}">
+                Movimientos
+            </a>
+            <a class="nav-link {% if request.resolver_match.url_name == 'usuarios_log' %}active{% endif %}" href="{% url 'usuarios_log' %}">
+                Usuarios
+            </a>
+            {% if user.is_staff %}
+                <a class="nav-link {% if request.resolver_match.url_name == 'admin_panel' %}active{% endif %}" href="{% url 'admin_panel' %}">Panel de administrador</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="sb-sidenav-footer">
+        <div class="small mt-2">Cuenta</div>
+        <form id="logout-form" action="{% url 'logout' %}" method="post" class="w-100">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-outline-light w-100 text-left">← Cerrar sesión</button>
+        </form>
+    </div>
+</nav>

@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Iniciar sesión</title>
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/login.css' %}" rel="stylesheet" />
+    <link rel="icon" type="image/jpeg" href="{% static 'assets/img/LOGO.jpg' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .password-container {
+            position: relative;
+        }
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body class="bg-primary page-login">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-5">
+                <div class="card shadow-lg border-0 rounded-lg">
+                    <div class="card-header">
+                        <h3 class="text-center my-3">🔑 Iniciar sesión</h3>
+                    </div>
+                    <div class="card-body">
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+                        <form method="post" action="{% url 'login' %}">
+                            {% csrf_token %}
+                            {% if next %}
+                                <input type="hidden" name="next" value="{{ next }}">
+                            {% endif %}
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="inputUsername" name="username" type="text" placeholder="Usuario" required />
+                                <label for="inputUsername">Usuario</label>
+                            </div>
+                            <div class="form-floating mb-3 password-container">
+                                <input class="form-control" id="inputPassword" name="password" type="password" placeholder="Contraseña" required />
+                                <label for="inputPassword">Contraseña</label>
+                                <span class="toggle-password" id="togglePasswordIcon">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </div>
+                            <button class="btn btn-primary w-100" type="submit">Entrar</button>
+                        </form>
+                    </div>
+                    <div class="card-footer text-center py-3">
+                        <div class="small"><a href="{% url 'usuarios:password_reset_flow' %}">¿Olvidaste tu contraseña?</a></div>
+                        <div class="small mt-2"><a href="{% url 'crear_usuario_publico' %}">¿No tienes cuenta? Créala aquí</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Licencia -->
+        <div class="text-center mt-4 text-white">
+            <p class="small">
+                📘 Este sistema está bajo licencia Creative Commons (CC BY-NC-SA 4.0). Puedes copiar, distribuir y adaptar el sistema para fines educativos, siempre que se reconozca la autoría y no se use con fines comerciales.
+            </p>
+        </div>
+    </div>
+    <script src="{% static 'js/scripts.js' %}"></script>
+    <script>
+        const togglePassword = document.querySelector('#togglePasswordIcon');
+        const password = document.querySelector('#inputPassword');
+
+        if (togglePassword) {
+            togglePassword.addEventListener('click', function () {
+                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                password.setAttribute('type', type);
+                
+                const icon = this.querySelector('i');
+                if (type === 'password') {
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                } else {
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

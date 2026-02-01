@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Agregar Bien</title>
+    <link rel="icon" type="image/jpeg" href="{% static 'assets/img/LOGO.jpg' %}">
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/index.css' %}" rel="stylesheet" />
+</head>
+<body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark fixed-top-only">
+        <a class="navbar-brand ps-3" href="{% url 'inventario' %}">Gestión de Bienes</a>
+    </nav>
+
+    <div class="container mt-5 pt-4">
+        <h2 class="mb-4">➕ Agregar nuevo bien</h2>
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        {% if error_message %}
+            <div class="alert alert-warning" role="alert">
+                ⚠️ {{ error_message }}
+            </div>
+        {% endif %}
+
+        <form method="post" class="card p-4 shadow-lg border-0">
+            {% csrf_token %}
+            
+            {% for field in form %}
+                <div class="mb-3">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% for error in field.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+
+            <div class="d-flex justify-content-between mt-3">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <a href="{% url 'inventario' %}" class="btn btn-outline-dark">Cancelar</a>
+            </div>
+        </form>
+    </div>
+    <script src="{% static 'js/inactivity-timer.js' %}"></script>
+</body>
+</html>

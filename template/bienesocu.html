@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Inventario - Bienes Inactivos{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4">
+    <div id="mainContent" class="mt-4">
+        <!-- Bienes Inactivos -->
+        <div class="mt-5">
+            <h2 class="mb-3">🗂️ Bienes Inactivos</h2>
+            <div class="d-flex justify-content-end mb-3">
+                <form method="get" class="d-flex" style="max-width: 400px;">
+                    <input class="form-control me-2" type="search" name="q" placeholder="Buscar bien inactivo..." value="{{ current_query|default:'' }}">
+                    <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+                </form>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover rounded shadow-sm">
+                    <thead>
+                        <tr>
+                            <th>Descripción</th>
+                            <th>CODIGO</th>
+                            <th>NumDeBien</th>
+                            <th>Fecha Eliminado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for prod in ocultos %}
+                        <tr>
+                            <td>{{ prod.descripcion }}</td>
+                            <td>{{ prod.codigo }}</td>
+                            <td>{{ prod.num_de_bien }}</td>
+                            <td>{{ prod.deleted_at|date:"d/m/Y H:i" }}</td>
+                            <td>
+                                <form method="post" action="{% url 'restaurar_producto' prod.id %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-success">Restaurar</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="5">No hay bienes inactivos.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

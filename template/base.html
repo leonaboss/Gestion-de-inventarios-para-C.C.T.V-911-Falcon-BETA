@@ -1,0 +1,162 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Inventario{% endblock %}</title>
+    <link rel="icon" type="image/jpeg" href="{% static 'assets/img/LOGO.jpg' %}">
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/index.css' %}" rel="stylesheet" />
+
+    <!-- Script para el cierre de sesión seguro -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Función para obtener el valor de la cookie CSRF
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            const logoutLink = document.getElementById('logout-link');
+            if (logoutLink) {
+                logoutLink.addEventListener('click', function(e) {
+                    e.preventDefault(); // Evita que el enlace navegue
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = "{% url 'logout' %}";
+                    form.innerHTML = `<input type="hidden" name="csrfmiddlewaretoken" value="${getCookie('csrftoken')}">`;
+                    document.body.appendChild(form);
+                    form.submit();
+                });
+            }
+        });
+    </script>
+</head>
+<body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-light bg-light">
+        <a class="navbar-brand ps-3" href="{% url 'dashboard' %}">Gestión de Bienes</a>
+        <button class="btn btn-link btn-sm" id="sidebarToggle">☰</button>
+    </nav>
+
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            {% include '_sidebar.html' %}
+        </div>
+
+        <div id="layoutSidenav_content">
+            <main>
+                {% block content %}
+                {% endblock %}
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="{% static 'js/scripts.js' %}"></script>
+    <script src="{% static 'js/indexjs.js' %}"></script>
+    {# Se comenta el script de inactividad anterior para implementar la nueva lógica global. #}
+    {# <script src="{% static 'js/inactivity-timer.js' %}"></script> #}
+
+    <!-- ========= INICIO: SCRIPT DE INACTIVIDAD GLOBAL Y AVISO ========= -->
+    
+    <!-- Elemento HTML para el aviso flotante -->
+    <div id="inactivity-warning-modal" class="inactivity-toast">
+        <p>Tu sesión va a caducar pronto por inactividad. Mueve el ratón para seguir en el sistema.</p>
+    </div>
+
+    <!-- Estilos CSS para el aviso profesional -->
+    <style>
+        .inactivity-toast {
+            display: none; /* Oculto por defecto */
+            position: fixed;
+            z-index: 1060; /* Alto para estar por encima de otros elementos */
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            background-color: #fff;
+            color: #004085; /* Texto azul oscuro */
+            border: 1px solid #b8daff; /* Borde azul claro */
+            border-radius: 0.25rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        .inactivity-toast.visible {
+            opacity: 1;
+            transform: translateX(0);
+            display: block;
+        }
+        .inactivity-toast p {
+            margin: 0;
+        }
+    </style>
+
+    <!-- Lógica JavaScript para el temporizador -->
+    <script>
+    (function() {
+        const IDLE_MINUTES = 3; // Minutos de inactividad para cerrar sesión
+        const WARNING_SECONDS = 30; // Segundos antes del cierre para mostrar aviso
+
+        const IDLE_TIMEOUT = IDLE_MINUTES * 60 * 1000;
+        const WARNING_TIMEOUT = IDLE_TIMEOUT - (WARNING_SECONDS * 1000);
+
+        let idleTimer;
+        let warningTimer;
+        const warningToast = document.getElementById('inactivity-warning-modal');
+
+        function showWarning() {
+            if (warningToast) {
+                warningToast.classList.add('visible');
+            }
+        }
+
+        function hideWarning() {
+            if (warningToast) {
+                warningToast.classList.remove('visible');
+            }
+        }
+
+        function finalLogout() {
+            hideWarning();
+            // Redirigir a la página de login con el mensaje.
+            // Nota: El nombre de la URL de login debe ser 'login' en tu archivo urls.py
+            // para que `{% url 'login' %}` funcione correctamente.
+            window.location.href = `{% url 'login' %}?message=Sesión+expirada`;
+        }
+
+        function resetTimer() {
+            clearTimeout(idleTimer);
+            clearTimeout(warningTimer);
+            hideWarning();
+
+            warningTimer = setTimeout(showWarning, WARNING_TIMEOUT);
+            idleTimer = setTimeout(finalLogout, IDLE_TIMEOUT);
+        }
+
+        // Reiniciar con actividad del usuario (ratón, teclado, click, scroll)
+        const activityEvents = ['mousemove', 'keypress', 'click', 'scroll'];
+        activityEvents.forEach(event => {
+            document.addEventListener(event, resetTimer, { capture: true, passive: true });
+        });
+
+        // Iniciar el temporizador al cargar la página
+        window.addEventListener('load', resetTimer);
+    })();
+    </script>
+    <!-- ========= FIN: SCRIPT DE INACTIVIDAD GLOBAL ========= -->
+
+</body>
+</html>

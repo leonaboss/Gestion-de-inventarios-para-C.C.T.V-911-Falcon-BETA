@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recuperar Cuenta</title>
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/login.css' %}" rel="stylesheet" />
+    <link rel="icon" type="image/jpeg" href="{% static 'assets/img/LOGO.jpg' %}">
+</head>
+<body class="bg-primary page-login">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="card shadow-lg border-0 rounded-lg">
+                    <div class="card-header">
+                        <h3 class="text-center my-3">🔑 Recuperar Contraseña</h3>
+                    </div>
+                    <div class="card-body">
+                        
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %}" role="alert">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        <!-- Formulario para verificar frase -->
+                        <form method="post" action="{% url 'usuarios:password_reset_flow' %}">
+                            {% csrf_token %}
+                            <div class="small mb-3 text-muted">Introduce tu usuario y tu frase de seguridad para restablecer tu contraseña.</div>
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="inputUsername" type="text" name="username" placeholder="nombredeusuario" required value="{{ username|default:'' }}" autocomplete="username" />
+                                <label for="inputUsername">Usuario</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="inputPhrase" type="text" name="frase_seguridad" placeholder="Mi frase secreta" required />
+                                <label for="inputPhrase">Frase de Seguridad</label>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" name="check_phrase" class="btn btn-primary">Verificar</button>
+                            </div>
+                        </form>
+
+                        {% if step == 2 %}
+                            <hr>
+                            <!-- Formulario para restablecer contraseña -->
+                            <form method="post" action="{% url 'usuarios:password_reset_flow' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="username" value="{{ username }}" autocomplete="username">
+                                <div class="form-floating mb-3">
+                                    <input class="form-control" id="inputPassword" type="password" name="new_password" placeholder="Nueva contraseña" required autocomplete="new-password" />
+                                    <label for="inputPassword">Nueva Contraseña</label>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" name="set_password" class="btn btn-success">Guardar Nueva Contraseña</button>
+                                </div>
+                            </form>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer text-center py-3">
+                        <div class="small"><a href="{% url 'login' %}">Volver a iniciar sesión</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/scripts.js' %}"></script>
+</body>
+</html>

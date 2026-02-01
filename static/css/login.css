@@ -1,0 +1,7 @@
+.page-login {
+    background-color: #ecf0f1; /* Nuevo fondo gris claro */
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

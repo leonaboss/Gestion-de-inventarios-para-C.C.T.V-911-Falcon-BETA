@@ -1,0 +1,114 @@
+/*
+ * Estilos minimalistas para el contenido principal de la aplicación.
+ * Reemplaza el tema oscuro anterior por uno claro y profesional.
+ */
+
+/* --- Estilos Generales del Contenido --- */
+body {
+    background-color: #f4f7f9; /* Un gris aún más suave para el fondo general */
+    color: #333;
+}
+
+#layoutSidenav_content {
+    background-color: #f4f7f9;
+}
+
+/* --- Estilo de Tarjetas (Cards) para formularios y contenedores --- */
+.card {
+    background-color: #ffffff;
+    border: 1px solid #e0e5ec; /* Borde muy sutil */
+    border-radius: 0.5rem; /* Bordes ligeramente más redondeados */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Sombreado suave y profesional */
+    transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e0e5ec;
+    font-weight: 600;
+}
+
+/* --- Estilo de Tablas --- */
+.table {
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    overflow: hidden; /* Para que el radio se aplique a las celdas */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.table thead th {
+    background-color: #f8f9fa;
+    color: #34495e; /* Azul pizarra oscuro para el texto del encabezado */
+    font-weight: 600;
+    border-bottom: 2px solid #e0e5ec;
+    border-top: none;
+}
+.table thead th a {
+    text-decoration: none;
+    color: inherit; /* Hereda el color del th */
+    display: block;
+}
+
+.table tbody td {
+    color: #555;
+    border-top: 1px solid #e9ecef;
+    vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #fbfcfd; /* Un hover casi imperceptible */
+    color: #2c3e50;
+}
+
+/* --- Estilos para Formularios (agregar_producto, editar_producto, etc.) --- */
+form .form-control,
+form .form-select {
+    background-color: #fdfdff;
+    border: 1px solid #d1d9e6;
+    border-radius: 0.375rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+form .form-control:focus,
+form .form-select:focus {
+    border-color: var(--custom-primary);
+    box-shadow: 0 0 0 0.2rem rgba(52, 73, 94, 0.15);
+    background-color: #fff;
+}
+
+form label {
+    font-weight: 500;
+    color: #555;
+    margin-bottom: 0.5rem;
+}
+
+/* --- Clases de la plantilla SB Admin --- */
+.sb-sidenav-dark {
+    background-color: var(--custom-dark) !important;
+}
+
+.sb-sidenav-dark .nav-link.active {
+    color: #fff;
+}
+
+.sb-sidenav-dark .nav-link:hover {
+    color: #fff;
+}
+
+.sb-topnav {
+    background-color: #ffffff !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    border-bottom: 1px solid #e0e5ec;
+}
+
+.fixed-top-only {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1030;
+}
