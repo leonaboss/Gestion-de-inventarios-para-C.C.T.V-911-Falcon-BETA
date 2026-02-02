@@ -29,7 +29,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 # ...existing code...
-ALLOWED_HOSTS: list[str] = ["192.168.1.243", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS: list[str] = ["*", "localhost", "127.0.0.1"]
 # ...existing code...
 
 
